@@ -8,8 +8,10 @@ $id = $_GET['id'] ?? '1'; // PHP > 7.0
 
 $subject = find_subject_by_id($id);
 
-$page_set = find_all_pages(); // but there's a problem with this ..:-)
-
+//$page_set = find_all_pages(); // but there's a problem with this ..:-)
+/* all pages will be listed, we just want pages to be listed if belong to the subject_id*/
+// so we better use our function find_pages_by_subject_id()
+$page_set = find_pages_by_subject_id($id); // second param not a must
 ?>
 
 <?php $page_title = 'Show Subject'; ?>
