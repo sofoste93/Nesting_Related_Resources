@@ -37,6 +37,8 @@ if(is_post_request()) {
 $page_set = find_all_pages();
 $page_count = mysqli_num_rows($page_set) + 1;
 mysqli_free_result($page_set);
+// count
+$page_count = count_pages_by_subject_id($page['subject_id']) + 1 // it's a new record, so +1
 
 ?>
 

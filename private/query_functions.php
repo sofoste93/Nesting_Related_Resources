@@ -307,7 +307,25 @@
     confirm_result_set($result);
     return $result;
   }
+  // count pages by subject_id
+  function count_pages_by_subject_id($subject_id, $options=[]) {
+    global $db;
 
+    $visible = $options['visible'] ?? false;
+
+    $sql = "SELECT COUNT(id) FROM pages "; // don't return the data to me, but count them instead
+    $sql .= "WHERE subject_id='" . db_escape($db, $subject_id) . "' ";
+    if($visible) {
+      $sql .= "AND visible = true ";
+    }
+    $sql .= "ORDER BY position ASC";
+    $result = mysqli_query($db, $sql);
+    confirm_result_set($result);
+    $row = mysqli_fetch_row($result);
+    mysqli_free_result($result);
+    $count = $row[0];
+    return $count; // we now get counted rows returned /not result anymore
+  }
   // Admins
 
   // Find all admins, ordered last_name, first_name
