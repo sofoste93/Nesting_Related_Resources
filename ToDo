@@ -6,10 +6,24 @@
                         ==============================================================
                                          # Understand Nested Resources
                         ==============================================================
-                        
+                        - Resource: a set of data or functionality of a single type
+                        - Subjects, pages, admins
+                        - Nested resource: a resource inside another resource
+                        - Dependent
+                        - One-To-Many Relationships
+
+                        i.e: | Subjects
+                                  -Pages
+
+                        - No direct access to pages
+                        - Access pages through subjects
+                        - Group pages by subject
+                        - All links and redirects must work with new structure
+
                         ==============================================================
                                          # Understand Nested Resources
                         ==============================================================
+
 
                         ==============================================================
                                          # Understand Nested Resources
