@@ -32,6 +32,7 @@ Nesting Related Ressources with PHP
 
                         // $id = isset($_GET['id']) ? $_GET['id'] : '1';
                         $id = $_GET['id'] ?? '1'; // PHP > 7.0
+                        
 
                         $subject = find_subject_by_id($id);
 
