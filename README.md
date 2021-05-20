@@ -1,4 +1,4 @@
-# Nesting_Related_Ressources
+# Nesting_Related_Resources
 
 Nesting Related Ressources with PHP
 
