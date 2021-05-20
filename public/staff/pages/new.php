@@ -26,7 +26,7 @@ if(is_post_request()) {
 } else {
 
   $page = [];
-  $page['subject_id'] = '';
+  $page['subject_id'] = $_GET['subject_id'] ?? '1'; // we are not gonna leave it blank anymore, but set a default-non-blank page
   $page['menu_name'] = '';
   $page['position'] = '';
   $page['visible'] = '';
@@ -45,7 +45,9 @@ mysqli_free_result($page_set);
 
 <div id="content">
 
-  <a class="back-link" href="<?php echo url_for('/staff/pages/index.php'); ?>">&laquo; Back to List</a>
+<!--  <a class="back-link" href="--><?php //echo url_for('/staff/pages/index.php'); ?><!--">&laquo; Back to List</a>-->
+    <a class="back-link" href="<?php echo url_for('/staff/subjects/show.php?id=' .
+        h(u($page['subject_id']))); ?>">&laquo; Back to Subject page</a>
 
   <div class="page new">
     <h1>Create Page</h1>

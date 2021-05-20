@@ -21,26 +21,64 @@
                         - All links and redirects must work with new structure
 
                         ==============================================================
-                                         # Understand Nested Resources
+                                         # List pages by subject
                         ==============================================================
+                        <?php
+                        require_login();
+
+                        // $id = isset($_GET['id']) ? $_GET['id'] : '1';
+                        $id = $_GET['id'] ?? '1'; // PHP > 7.0
+
+                        $subject = find_subject_by_id($id);
+
+                        //$page_set = find_all_pages(); // but there's a problem with this ..:-)
+                        /* all pages will be listed, we just want pages to be listed if belong to the subject_id*/
+                        // so we better use our function find_pages_by_subject_id()
+                        $page_set = find_pages_by_subject_id($id); // second param not a must
+                        ?>
 
 
                         ==============================================================
-                                         # Understand Nested Resources
+                                         # Use nested links
                         ==============================================================
+                        So, the key thing that you need to remember about these nested
+                        links is making sure that you can pass around the information
+                        you need to maintain your nested state, so that you know what
+                        the parent record is.
+                            Sometimes you may be able to get that from the parent itself,
+                        sometimes, you can get it from the foreign key of the child object,
+                        sometimes you need to pass it in the URL so that you know it.
+                        There's actually a fourth possibility as well, which is that if
+                        we go to submit our form for our new page, we still have the subject ID,
+                        and that's because it's in the form data. It's passed in in the form data,
+                        so when we call URL four, we're not passing in the subject ID there,
+                        it's actually down here in the form data, and that allows us to be able
+                        to use it up here inside the form processing.
 
                         ==============================================================
-                                         # Understand Nested Resources
+                                         # Use nested redirects
                         ==============================================================
+                        If it doesn't exist, then don't try and delete it, right? Do something
+                        different instead, redirect. Redirect back to another page saying, hey sorry,
+                        the page you just wanted to delete doesn't exist, right? So I can think of a
+                        lot of ways that I could provide better error checking if I first go and look
+                        for the page before I try and delete it. So that's why I picked this one.
+                        So we'll save the result. So now we've counted for all of our links, all of
+                        our forms, and all of our redirects. They all work now with our new nested structure.
 
                         ==============================================================
-                                         # Understand Nested Resources
+                                         # Add page count to each subject
                         ==============================================================
 
-                        ==============================================================
-                                         # Understand Nested Resources
-                        ==============================================================
+
 
                         ==============================================================
-                                         # Understand Nested Resources
+                                         # Scope page position by subject
                         ==============================================================
+
+
+
+                        ==============================================================
+                                         # Update positions
+                        ==============================================================
+

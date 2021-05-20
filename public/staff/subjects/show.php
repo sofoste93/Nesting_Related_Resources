@@ -46,7 +46,9 @@ $page_set = find_pages_by_subject_id($id); // second param not a must
           <h2>Pages</h2>
 
           <div class="actions">
-              <a class="action" href="<?php echo url_for('/staff/pages/new.php'); ?>">Create New Page</a>
+              <!--include the subject_id in the link-->
+              <a class="action" href="<?php echo url_for('/staff/pages/new.php?subject_id=' .
+              h(u($subject['id']))); ?>">Create New Page</a>
           </div>
 
           <table class="list">
