@@ -95,10 +95,139 @@
                         ==============================================================
                                          # Scope page position by subject
                         ==============================================================
+                        //$page_set = find_all_pages();
+                        //$page_count = mysqli_num_rows($page_set);
+                        //mysqli_free_result($page_set);
 
-
+                        // count
+                        $page_count = count_pages_by_subject_id($page['subject_id']);
+                        // do not increment anymore, we're just editing
+                        // count
+                        $page_count = count_pages_by_subject_id($page['subject_id']) + 1 // it's a new record, so +1
 
                         ==============================================================
                                          # Update positions
                         ==============================================================
+                        - Automatically manage position numbering
+                        - Adding, moving, or deleting an item should adjust the positions
+                          of other items
+                        - Reduces item-by-item editing
+                        - Add code to existing insert, update, and delete functions
+
+                        - Add new item
+                        - Delete item
+                        - Move item later in the list
+                        - Move item earlier in the list
+
+                        # Add new item                      # Delete item
+                        - Starting position 0               - Starting position: provided
+                        - Ending position is provided       - Ending position: 0
+                        - No existing record to consider    - Existing record to exclude from update
+                        - Add 1 to all items greater than   - Subtract 1 from all items greater than
+                          ending position                     starting position
+
+                        # Move Item Later in the List
+                        - Starting position is provided
+                        - Ending position is provided
+                        - Existing record to exclude from update
+                        - Subtract 1 from all items greater than starting position and
+                          less than or equal to ending position
+
+                        # Move item earlier in the list
+                        - Starting position is provided
+                        - Ending position is provided
+                        - Existing record to exclude from update
+                        - Add 1 to all items greater than or equal to ending position
+                          and less than starting position
+
+                        function shift_subject_positions($start_pos, $end_pos, $current_id=0) {
+                            if($start_pos == 0){
+                                // new item, +1 to items greater than $end_pos
+                            } elseif($end_pos == 0) {
+                                // delete item, -1 from items greater than start $start_pos
+                            } elseif($start_pos < $end_pos) {
+                                // move later, -1 from items between (including $end_pos)
+                            } elseif($start_pos > $send_pos) {
+                                // move earlier, +1 to items between (including $end_pos)
+                            }
+                            // Exclude the current_id in the SQL WHERE clause
+                        }
+
+                        UPDATE subjects
+                        SET position = position - 1
+                        WHERE position > 2
+                        AND position <= 6
+                        AND id != 8;
+
+                        - Subject positions
+                        - Page positions
+                        - Pages must consider the subject_id
+
+                          // update positions
+                          function shift_subject_positions($start_pos, $end_pos, $current_id=0) {
+                            global $db;
+                            if ($start_pos == $end_pos) { return; }
+
+                            # QUERY_FUNCTIONS.PHP
+
+
+                            $sql = "UPDATE subjects ";
+                            if($start_pos == 0){
+                              // new item, +1 to items greater than $end_pos
+                              $sql .= "SET position = position + 1";
+                              $sql .= "WHERE position >= '" . db_escape($db, $end_pos) . "' ";
+
+                            } elseif($end_pos == 0) {
+                              // delete item, -1 from items greater than start $start_pos
+                              $sql .= "SET position = position - 1 ";
+                              $sql .= "WHERE position > '" . db_escape($db, $start_pos) . "' ";
+
+                            } elseif($start_pos < $end_pos) {
+                              // move later, -1 from items between (including $end_pos)
+                              $sql .= "SET position = position - 1 ";
+                              $sql .= "WHERE position > '" . db_escape($db, $start_pos) . "' ";
+                              $sql .= "AND position <= '" . db_escape($db, $end_pos);
+
+                            } elseif($start_pos > $end_pos) {
+                              // move earlier, +1 to items between (including $end_pos)
+                              $sql .= "SET position = position + 1 ";
+                              $sql .= "WHERE position >= '" . db_escape($db, $end_pos) . "' ";
+                              $sql .= "AND position < '" . db_escape($db, $start_pos) . "' ";
+
+                            }
+                            // Exclude the current_id in the SQL WHERE clause
+                            $sql .= "AND id != '" . db_escape($db, $current_id) . "' ";
+
+                            $result = mysqli_query($db, $sql);
+                            // For UPDATE statements, $result is true/false
+                            if ($result) {
+                              return true;
+                            } else {
+                              // UPDATE failed
+                              echo mysqli_error($db);
+                              db_disconnect($db);
+                              exit();
+                            }
+                          }
+
+                          # insert_subject(){...}
+                              // ..update positions
+                              shift_subject_positions(0, $subject['position']);
+
+                          # update_subject(){...}
+                              // update...positions
+                              $old_subject = find_subject_by_id($subject['id']);
+                              $old_position = $old_subject['position'];
+                              shift_subject_positions($old_position, $subject['position'], $subject['id']);
+
+                          # delete_subject(){...}
+                            // use id...update position
+                            $old_subject = find_subject_by_id($id);
+                            $old_position = $old_subject['position'];
+                            shift_subject_positions($old_position, 0, $id); // the new position is 0 because I remove it from the list
+
+                          # Do the same for pages, but with an additional parameter
+                          : subject_id - (Remember Relationship between pages & subjects tables)
+
+
 

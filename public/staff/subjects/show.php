@@ -7,11 +7,8 @@ require_login();
 $id = $_GET['id'] ?? '1'; // PHP > 7.0
 
 $subject = find_subject_by_id($id);
+$page_set = find_pages_by_subject_id($id);
 
-//$page_set = find_all_pages(); // but there's a problem with this ..:-)
-/* all pages will be listed, we just want pages to be listed if belong to the subject_id*/
-// so we better use our function find_pages_by_subject_id()
-$page_set = find_pages_by_subject_id($id); // second param not a must
 ?>
 
 <?php $page_title = 'Show Subject'; ?>
@@ -40,47 +37,45 @@ $page_set = find_pages_by_subject_id($id); // second param not a must
       </dl>
     </div>
 
-      <hr>
-      <!--list of our pages-->
-      <div class="pages listing">
-          <h2>Pages</h2>
+    <hr />
 
-          <div class="actions">
-              <!--include the subject_id in the link-->
-              <a class="action" href="<?php echo url_for('/staff/pages/new.php?subject_id=' .
-              h(u($subject['id']))); ?>">Create New Page</a>
-          </div>
+    <div class="pages listing">
+      <h2>Pages</h2>
 
-          <table class="list">
-              <tr>
-                  <th>ID</th>
-                  <!--<th>Subject</th>-->
-                  <th>Position</th>
-                  <th>Visible</th>
-                  <th>Name</th>
-                  <th>&nbsp;</th>
-                  <th>&nbsp;</th>
-                  <th>&nbsp;</th>
-              </tr>
-
-              <?php while($page = mysqli_fetch_assoc($page_set)) { ?>
-                  <?php $subject = find_subject_by_id($page['subject_id']); ?>
-                  <tr>
-                      <td><?php echo h($page['id']); ?></td>
-                      <!--<td>< ?php echo h($subject['menu_name']); ?></td>-->
-                      <td><?php echo h($page['position']); ?></td>
-                      <td><?php echo $page['visible'] == 1 ? 'true' : 'false'; ?></td>
-                      <td><?php echo h($page['menu_name']); ?></td>
-                      <td><a class="action" href="<?php echo url_for('/staff/pages/show.php?id=' . h(u($page['id']))); ?>">View</a></td>
-                      <td><a class="action" href="<?php echo url_for('/staff/pages/edit.php?id=' . h(u($page['id']))); ?>">Edit</a></td>
-                      <td><a class="action" href="<?php echo url_for('/staff/pages/delete.php?id=' . h(u($page['id']))); ?>">Delete</a></td>
-                  </tr>
-              <?php } ?>
-          </table>
-
-          <?php mysqli_free_result($page_set); ?>
-
+      <div class="actions">
+        <a class="action" href="<?php echo url_for('/staff/pages/new.php?subject_id=' . h(u($subject['id']))); ?>">Create New Page</a>
       </div>
+
+      <table class="list">
+        <tr>
+          <th>ID</th>
+          <th>Position</th>
+          <th>Visible</th>
+          <th>Name</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+        </tr>
+
+        <?php while($page = mysqli_fetch_assoc($page_set)) { ?>
+          <?php $subject = find_subject_by_id($page['subject_id']); ?>
+          <tr>
+            <td><?php echo h($page['id']); ?></td>
+            <td><?php echo h($page['position']); ?></td>
+            <td><?php echo $page['visible'] == 1 ? 'true' : 'false'; ?></td>
+            <td><?php echo h($page['menu_name']); ?></td>
+            <td><a class="action" href="<?php echo url_for('/staff/pages/show.php?id=' . h(u($page['id']))); ?>">View</a></td>
+            <td><a class="action" href="<?php echo url_for('/staff/pages/edit.php?id=' . h(u($page['id']))); ?>">Edit</a></td>
+            <td><a class="action" href="<?php echo url_for('/staff/pages/delete.php?id=' . h(u($page['id']))); ?>">Delete</a></td>
+          </tr>
+        <?php } ?>
+      </table>
+
+      <?php mysqli_free_result($page_set); ?>
+
+    </div>
+
+
 
   </div>
 
