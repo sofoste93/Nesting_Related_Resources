@@ -6,6 +6,9 @@
 //  $page_set = find_all_pages();
   redirect_to('staff/index.php');
 ?>
+
+
+
 <!--
 <?php /*$page_title = 'Pages'; */?>
 <?php /*include(SHARED_PATH . '/staff_header.php'); */?>
